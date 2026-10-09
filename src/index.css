@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-editorial: 'Newsreader', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  --color-paper: #f6f3eb;
+  --color-paper-light: #fcfbf7;
+  --color-paper-card: #f9f7f2;
+  --color-paper-dark: #eae3d2;
+  --color-ink: #1c1917;
+  --color-ink-muted: #57534e;
+  --color-ink-faint: #78716c;
+  --color-rule: #d6cebe;
+  --color-rule-dark: #8c8273;
+  --color-maroon: #6e1a24;
+  --color-maroon-dark: #4f1118;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-paper);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: var(--font-editorial);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: #6e1a24;
+  color: #fcfbf7;
+}
+
+/* Double rule borders for newspaper aesthetic */
+.border-double-t {
+  border-top-width: 4px;
+  border-top-style: double;
+  border-top-color: var(--color-ink);
+}
+
+.border-double-b {
+  border-bottom-width: 4px;
+  border-bottom-style: double;
+  border-bottom-color: var(--color-ink);
+}
+
+.border-double-y {
+  border-top-width: 4px;
+  border-top-style: double;
+  border-top-color: var(--color-ink);
+  border-bottom-width: 4px;
+  border-bottom-style: double;
+  border-bottom-color: var(--color-ink);
+}
+
+/* Editorial Drop Cap */
+.drop-cap::first-letter {
+  font-family: var(--font-serif);
+  float: left;
+  font-size: 3.4rem;
+  line-height: 0.82;
+  padding-top: 4px;
+  padding-right: 10px;
+  padding-bottom: 2px;
+  font-weight: 700;
+  color: var(--color-maroon);
+}
+
+/* Ink drying effect for photos */
+.ink-drying-img {
+  filter: grayscale(85%) contrast(92%) brightness(96%);
+  transition: filter 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s ease;
+}
+
+.ink-drying-img:hover,
+.ink-drying-img.ink-revealed {
+  filter: grayscale(10%) contrast(102%) brightness(100%);
+}
