@@ -1,11 +1,19 @@
 import { Printer } from 'lucide-react';
+import FoldedIntro from './components/FoldedIntro';
 import Masthead from './components/Masthead';
 import Headline from './components/Headline';
 import MainStory from './components/MainStory';
 import MomentCard from './components/MomentCard';
-import Timeline from './components/Timeline';
+import InMemoriam from './components/InMemoriam';
 import PullQuote from './components/PullQuote';
+import Timeline from './components/Timeline';
+import MusicColumn from './components/MusicColumn';
+import HandwrittenLetters from './components/HandwrittenLetters';
 import Closing from './components/Closing';
+import ScrollProgressBar from './components/ScrollProgressBar';
+import MoonPhaseIndicator from './components/MoonPhaseIndicator';
+import InkCursorTrail from './components/InkCursorTrail';
+import AmbientSoundToggle from './components/AmbientSoundToggle';
 
 import {
   ARCHIVE_META,
@@ -22,27 +30,54 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f6f3eb] text-[#1c1917] selection:bg-[#6e1a24] selection:text-[#fcfbf7] py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
+    <div className="relative min-h-screen bg-[#f6f3eb] text-[#1c1917] selection:bg-[#6e1a24] selection:text-[#fcfbf7] py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
+      {/* 0. 3D Folded Newspaper Intro Overlay */}
+      <FoldedIntro meta={ARCHIVE_META} />
+
+      {/* 1. Subtle Paper Grain Texture Overlay */}
+      <div className="paper-grain-overlay" aria-hidden="true" />
+
+      {/* 2. Gentle Breathing Vignette along edges */}
+      <div className="paper-vignette" aria-hidden="true" />
+
+      {/* 3. Top Thin Reading Progress Bar */}
+      <ScrollProgressBar />
+
+      {/* 4. Desktop Micro-interaction: Ink Drop Bleed on Click */}
+      <InkCursorTrail />
+
       {/* Newspaper Page Wrapper */}
-      <div className="max-w-6xl mx-auto bg-[#fcfbf7] border border-[#d6cebe] shadow-sm px-4 sm:px-8 md:px-12 py-6 sm:py-10">
-        
-        {/* Floating Print / Archive action bar (hidden during print) */}
-        <div className="print:hidden flex items-center justify-between pb-3 mb-2 border-b border-[#e5ded0] text-xs font-sans text-[#78716c]">
+      <main className="relative z-10 max-w-6xl mx-auto bg-[#fcfbf7] border border-[#d6cebe] shadow-sm px-4 sm:px-8 md:px-12 py-6 sm:py-10">
+
+        {/* Floating Newspaper Utility Bar (hidden during print) */}
+        <div className="print:hidden flex flex-wrap items-center justify-between gap-3 pb-3 mb-2 border-b border-[#e5ded0] text-xs font-sans text-[#78716c]">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#6e1a24]"></span>
             <span className="uppercase tracking-widest text-[11px] font-medium text-[#1c1917]">
-              Edisi Khusus Koleksi Pribadi
+              Édition Spéciale Koleksi Pribadi
             </span>
           </div>
-          <button
-            onClick={handlePrint}
-            type="button"
-            className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-sans font-medium uppercase tracking-wider text-[#57534e] bg-[#f6f3eb] hover:bg-[#eae3d2] hover:text-[#1c1917] border border-[#d6cebe] rounded-xs transition-colors cursor-pointer"
-            title="Cetak lembaran koran atau simpan ke PDF"
-          >
-            <Printer size={13} />
-            <span>Cetak / Simpan PDF</span>
-          </button>
+
+          {/* Center Moon Phase Indicator */}
+          <MoonPhaseIndicator />
+
+          {/* Right Action Buttons */}
+          <div className="flex items-center gap-2">
+            {/* Ambient Sound (Vintage Paper & Vinyl Static with Presets) */}
+            <AmbientSoundToggle />
+
+            {/* Print / Save to PDF */}
+            <button
+              onClick={handlePrint}
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-sans font-medium uppercase tracking-wider text-[#57534e] bg-[#f6f3eb] hover:bg-[#eae3d2] hover:text-[#1c1917] border border-[#d6cebe] rounded-xs transition-colors cursor-pointer"
+              title="Cetak lembaran koran atau simpan ke PDF"
+            >
+              <Printer size={13} />
+              <span className="hidden sm:inline">Cetak / Simpan PDF</span>
+              <span className="sm:hidden">Cetak</span>
+            </button>
+          </div>
         </div>
 
         {/* 1. Masthead */}
@@ -58,7 +93,7 @@ export default function App() {
         <section className="w-full py-12 border-b border-[#d6cebe]">
           <div className="flex items-center justify-between pb-3 mb-8 border-b border-[#1c1917] text-xs font-sans tracking-widest uppercase text-[#57534e]">
             <span className="font-semibold text-[#1c1917]">
-              KOLOM MEMORABILIA • LEMBARAN PILIHAN
+              KOLOM MEMORABILIA &bull; LEMBARAN PILIHAN
             </span>
             <span>TOTAL {MOMENTS.length} MOMEN TERARSIP</span>
           </div>
@@ -73,22 +108,31 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {MOMENTS.map((moment) => (
-              <MomentCard key={moment.id} moment={moment} />
+            {MOMENTS.map((moment, idx) => (
+              <MomentCard key={moment.id} moment={moment} index={idx} />
             ))}
           </div>
         </section>
 
-        {/* 5. Pull Quote */}
+        {/* 5. Obituari Lembut ("In Memoriam") */}
+        <InMemoriam />
+
+        {/* 6. Pull Quote */}
         <PullQuote pullQuote={PULL_QUOTE} />
 
-        {/* 6. Linimasa */}
+        {/* 7. Linimasa */}
         <Timeline events={TIMELINE_EVENTS} meta={ARCHIVE_META} />
 
-        {/* 7. Penutup */}
+        {/* 8. Rubrik Musik ("Lagu Edisi Ini") */}
+        <MusicColumn />
+
+        {/* 9. Arsip Surat Tulisan Tangan */}
+        <HandwrittenLetters />
+
+        {/* 10. Penutup */}
         <Closing closing={CLOSING_NOTE} meta={ARCHIVE_META} />
 
-      </div>
+      </main>
     </div>
   );
 }

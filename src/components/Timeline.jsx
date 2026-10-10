@@ -11,8 +11,9 @@ export default function Timeline({ events, meta }) {
 
   useGSAP(() => {
     const mm = gsap.matchMedia();
+
     mm.add('(prefers-reduced-motion: no-preference)', () => {
-      // Scrub the vertical connecting line as user scrolls
+      // 1. Scrub the vertical connecting line as user scrolls
       if (lineProgressRef.current && containerRef.current) {
         gsap.fromTo(
           lineProgressRef.current,
@@ -22,26 +23,71 @@ export default function Timeline({ events, meta }) {
             ease: 'none',
             scrollTrigger: {
               trigger: containerRef.current,
-              start: 'top 70%',
+              start: 'top 75%',
               end: 'bottom 85%',
-              scrub: 0.6
+              scrub: 0.5
             }
           }
         );
       }
 
-      // Stagger timeline items
-      gsap.from('.timeline-item', {
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top 75%',
-          toggleActions: 'play none none none'
-        },
-        y: 20,
+      // 2. Animate each timeline entry with stamp effect and staggered slide
+      const items = gsap.utils.toArray('.timeline-node-item');
+      items.forEach((item, idx) => {
+        const stamp = item.querySelector('.timeline-stamp');
+        const card = item.querySelector('.timeline-card');
+        const direction = idx % 2 === 0 ? -20 : 20;
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: item,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        });
+
+        // Date node "stamped" with maroon ink (scale 1.35 -> 1 with slight rotational jitter)
+        if (stamp) {
+          const rotationAngle = (idx % 2 === 0 ? -7 : 6);
+          tl.fromTo(stamp,
+            {
+              scale: 1.35,
+              rotation: rotationAngle * 1.5,
+              opacity: 0
+            },
+            {
+              scale: 1,
+              rotation: rotationAngle,
+              opacity: 1,
+              duration: 0.65,
+              ease: 'back.out(1.8)'
+            }
+          );
+        }
+
+        // Narrative card slides in smoothly
+        if (card) {
+          tl.fromTo(card,
+            {
+              x: direction,
+              opacity: 0
+            },
+            {
+              x: 0,
+              opacity: 1,
+              duration: 0.75,
+              ease: 'power2.out'
+            },
+            '-=0.45'
+          );
+        }
+      });
+    });
+
+    mm.add('(prefers-reduced-motion: reduce)', () => {
+      gsap.from(containerRef.current, {
         opacity: 0,
-        duration: 0.7,
-        stagger: 0.12,
-        ease: 'power2.out'
+        duration: 0.6
       });
     });
   }, { scope: containerRef });
@@ -50,7 +96,7 @@ export default function Timeline({ events, meta }) {
     <section ref={containerRef} className="w-full py-12 border-b border-[#d6cebe]">
       {/* Section Header */}
       <div className="flex items-center justify-between pb-3 mb-8 border-b border-[#1c1917] text-xs font-sans tracking-widest uppercase text-[#57534e]">
-        <span className="font-semibold text-[#1c1917]">LINIMASA ARSIP • KILAS RETROSPEKSI</span>
+        <span className="font-semibold text-[#1c1917]">LINIMASA ARSIP &bull; KILAS RETROSPEKSI</span>
         <span>{meta?.dateRange || '17 JAN — 20 DES 2024'}</span>
       </div>
 
@@ -76,17 +122,21 @@ export default function Timeline({ events, meta }) {
 
         <div className="space-y-8">
           {events.map((evt, idx) => (
-            <div key={evt.id || idx} className="timeline-item relative flex items-start gap-4 sm:gap-6">
+            <div
+              key={evt.id || idx}
+              className="timeline-node-item relative flex items-start gap-4 sm:gap-6"
+            >
               {/* Dot node */}
-              <div className="relative z-10 w-6 h-6 -ml-[23px] sm:-ml-[31px] rounded-full border-2 border-[#1c1917] bg-[#f6f3eb] flex items-center justify-center">
+              <div className="relative z-10 w-6 h-6 -ml-[23px] sm:-ml-[31px] rounded-full border-2 border-[#1c1917] bg-[#f6f3eb] flex items-center justify-center shrink-0">
                 <div className="w-2 h-2 rounded-full bg-[#6e1a24]" />
               </div>
 
               {/* Node Card */}
-              <div className="flex-1 bg-[#f9f7f2] border border-[#d6cebe] p-4 rounded-xs shadow-2xs">
-                <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+              <div className="timeline-card flex-1 bg-[#f9f7f2] border border-[#d6cebe] p-4 rounded-xs shadow-2xs">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-[#6e1a24] bg-[#eae3d2] px-2 py-0.5 rounded-xs">
+                    {/* Ink Stamp Badge */}
+                    <span className="timeline-stamp text-[10.5px] font-mono font-bold uppercase tracking-wider text-[#6e1a24] bg-[#eae3d2] border border-[#6e1a24]/30 px-2 py-0.5 rounded-xs inline-block">
                       {evt.badge}
                     </span>
                     <span className="text-xs font-mono text-[#57534e]">
@@ -105,6 +155,17 @@ export default function Timeline({ events, meta }) {
                 <p className="font-editorial text-[14.5px] text-[#44403c] leading-relaxed">
                   {evt.desc}
                 </p>
+
+                {evt.songId && (
+                  <div className="mt-2.5 pt-2 border-t border-[#e5ded0] flex items-center justify-end">
+                    <a
+                      href="#rubrik-musik"
+                      className="inline-flex items-center gap-1 text-[11px] font-mono text-[#7a2e2e] hover:underline"
+                    >
+                      <span>♫ Lagu untuk momen ini &rarr;</span>
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           ))}
