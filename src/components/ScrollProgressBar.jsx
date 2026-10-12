@@ -31,7 +31,7 @@ export default function ScrollProgressBar() {
     >
       <div
         ref={barRef}
-        className="h-full bg-gradient-to-r from-[#1c1917] via-[#6e1a24] to-[#1c1917] origin-left scale-x-0"
+        className="h-full bg-gradient-to-r from-[#d9b86a] via-[#e5cf94] to-[#f4efe6] origin-left scale-x-0 shadow-[0_0_6px_rgba(217,184,106,0.45)]"
       />
     </div>
   );
