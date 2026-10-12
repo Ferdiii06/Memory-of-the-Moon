@@ -1,4 +1,5 @@
 import { Printer } from 'lucide-react';
+import NightBackdrop from './components/NightBackdrop';
 import FoldedIntro from './components/FoldedIntro';
 import Masthead from './components/Masthead';
 import Headline from './components/Headline';
@@ -30,7 +31,10 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#f6f3eb] text-[#1c1917] selection:bg-[#6e1a24] selection:text-[#fcfbf7] py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
+    <div className="relative z-[1] min-h-screen bg-transparent text-[#1c1917] selection:bg-[#6e1a24] selection:text-[#fcfbf7] py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
+      {/* Latar Tetap Malam di Balik Koran */}
+      <NightBackdrop />
+
       {/* 0. 3D Folded Newspaper Intro Overlay */}
       <FoldedIntro meta={ARCHIVE_META} />
 

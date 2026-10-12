@@ -234,3 +234,189 @@ body {
   }
 }
 
+/* =======================================================================
+   NIGHT BACKDROP: "Malam di Balik Koran" (nb- prefix)
+   ======================================================================= */
+
+:root {
+  --nb-bg-top: #14181f;
+  --nb-bg-bottom: #1c1a17;
+  --nb-star-opacity: 0.85;
+  --nb-glow-opacity: 0.16;
+  --nb-beam-opacity: 0.06;
+  --nb-beam-duration: 48s;
+}
+
+/* Warna dasar html dan body untuk area overscroll dan celah */
+html,
+body {
+  background-color: var(--nb-bg-top) !important;
+}
+
+/* Elevasi lembut koran di atas latar malam */
+main {
+  box-shadow:
+    0 30px 80px -24px rgba(0, 0, 0, 0.55),
+    0 2px 6px rgba(0, 0, 0, 0.28) !important;
+}
+
+/* Lapisan Utama Wadah Fixed */
+.nb-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  contain: layout paint style;
+  background: linear-gradient(180deg, var(--nb-bg-top) 0%, #17191d 45%, var(--nb-bg-bottom) 100%);
+  overflow: hidden;
+}
+
+/* Lapisan 2: Bintang Ubin A & B */
+.nb-stars-a,
+.nb-stars-b {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-repeat: repeat;
+}
+
+.nb-stars-a {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'%3E%3Ccircle cx='24' cy='48' r='0.8' fill='%23f4efe6' opacity='0.7'/%3E%3Ccircle cx='95' cy='120' r='1.1' fill='%23f4efe6' opacity='0.85'/%3E%3Ccircle cx='160' cy='30' r='0.7' fill='%23f4efe6' opacity='0.6'/%3E%3Ccircle cx='230' cy='85' r='1.0' fill='%23f4efe6' opacity='0.75'/%3E%3Ccircle cx='290' cy='40' r='0.6' fill='%23f4efe6' opacity='0.5'/%3E%3Ccircle cx='50' cy='210' r='1.2' fill='%23f4efe6' opacity='0.8'/%3E%3Ccircle cx='130' cy='180' r='0.7' fill='%23f4efe6' opacity='0.65'/%3E%3Ccircle cx='210' cy='230' r='0.9' fill='%23f4efe6' opacity='0.7'/%3E%3Ccircle cx='275' cy='170' r='1.1' fill='%23f4efe6' opacity='0.85'/%3E%3Ccircle cx='80' cy='290' r='0.7' fill='%23f4efe6' opacity='0.55'/%3E%3Ccircle cx='175' cy='270' r='1.0' fill='%23f4efe6' opacity='0.75'/%3E%3Ccircle cx='305' cy='280' r='0.8' fill='%23f4efe6' opacity='0.6'/%3E%3Ccircle cx='110' cy='70' r='0.6' fill='%23f4efe6' opacity='0.5'/%3E%3Ccircle cx='245' cy='140' r='0.8' fill='%23f4efe6' opacity='0.65'/%3E%3C/svg%3E");
+  background-size: 320px 320px;
+  will-change: opacity;
+  animation: nb-twinkle-a 7s ease-in-out infinite alternate;
+}
+
+.nb-stars-b {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='520' viewBox='0 0 520 520'%3E%3Ccircle cx='45' cy='115' r='0.9' fill='%23f4efe6' opacity='0.7'/%3E%3Ccircle cx='180' cy='65' r='0.7' fill='%23f4efe6' opacity='0.55'/%3E%3Ccircle cx='340' cy='140' r='1.1' fill='%23f4efe6' opacity='0.8'/%3E%3Ccircle cx='460' cy='75' r='0.8' fill='%23f4efe6' opacity='0.6'/%3E%3Ccircle cx='115' cy='360' r='1.0' fill='%23f4efe6' opacity='0.75'/%3E%3Ccircle cx='260' cy='275' r='0.6' fill='%23f4efe6' opacity='0.5'/%3E%3Ccircle cx='410' cy='390' r='0.9' fill='%23f4efe6' opacity='0.7'/%3E%3Ccircle cx='490' cy='240' r='0.7' fill='%23f4efe6' opacity='0.6'/%3E%3Ccircle cx='295' cy='470' r='1.0' fill='%23f4efe6' opacity='0.85'/%3E%3C/svg%3E");
+  background-size: 520px 520px;
+  will-change: opacity;
+  animation: nb-twinkle-b 11s ease-in-out infinite alternate;
+}
+
+@keyframes nb-twinkle-a {
+  0% {
+    opacity: calc(var(--nb-star-opacity) * 0.55);
+  }
+  100% {
+    opacity: var(--nb-star-opacity);
+  }
+}
+
+@keyframes nb-twinkle-b {
+  0% {
+    opacity: calc(var(--nb-star-opacity) * 0.6);
+  }
+  100% {
+    opacity: var(--nb-star-opacity);
+  }
+}
+
+/* Lapisan 3: Glow Bulan Keemasan Samar */
+.nb-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle 650px at 78% 18%,
+    rgba(217, 184, 106, var(--nb-glow-opacity)) 0%,
+    rgba(217, 184, 106, calc(var(--nb-glow-opacity) * 0.45)) 35%,
+    rgba(217, 184, 106, 0) 70%
+  );
+  animation: nb-glow-breathe 10s ease-in-out infinite alternate;
+}
+
+@keyframes nb-glow-breathe {
+  0% {
+    opacity: 0.75;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Lapisan 4: Bidang Cahaya Miring Rembulan */
+.nb-beam {
+  position: absolute;
+  top: -40%;
+  bottom: -40%;
+  left: 5%;
+  width: 580px;
+  max-width: 70vw;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(217, 184, 106, calc(var(--nb-beam-opacity) * 0.25)) 25%,
+    rgba(217, 184, 106, var(--nb-beam-opacity)) 50%,
+    rgba(217, 184, 106, calc(var(--nb-beam-opacity) * 0.25)) 75%,
+    transparent 100%
+  );
+  transform: rotate(-18deg) translate3d(0, 0, 0);
+  transform-origin: 50% 50%;
+  will-change: transform;
+  animation: nb-beam-drift var(--nb-beam-duration) ease-in-out infinite alternate;
+}
+
+@keyframes nb-beam-drift {
+  0% {
+    transform: rotate(-18deg) translate3d(-50px, -20px, 0);
+  }
+  100% {
+    transform: rotate(-18deg) translate3d(60px, 20px, 0);
+  }
+}
+
+/* Mode Ringan ("lite") */
+[data-nb="lite"] .nb-stars-a {
+  animation: none !important;
+  opacity: var(--nb-star-opacity);
+}
+
+[data-nb="lite"] .nb-stars-b {
+  display: none !important;
+}
+
+[data-nb="lite"] .nb-glow {
+  animation: none !important;
+  opacity: 1;
+}
+
+[data-nb="lite"] .nb-beam {
+  animation: none !important;
+  transform: rotate(-18deg) translate3d(0, 0, 0);
+}
+
+/* Pause Animasi saat Tab Tidak Aktif */
+[data-nb-paused="true"] .nb-stars-a,
+[data-nb-paused="true"] .nb-stars-b,
+[data-nb-paused="true"] .nb-glow,
+[data-nb-paused="true"] .nb-beam {
+  animation-play-state: paused !important;
+}
+
+/* Aksesibilitas: prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .nb-stars-a,
+  .nb-stars-b,
+  .nb-glow,
+  .nb-beam {
+    animation: none !important;
+  }
+}
+
+/* Mode Cetak / Ekspor PDF Bersih */
+@media print {
+  .nb-backdrop {
+    display: none !important;
+  }
+  html,
+  body {
+    background-color: var(--color-paper, #f6f3eb) !important;
+  }
+  main {
+    box-shadow: none !important;
+  }
+}
+
+
